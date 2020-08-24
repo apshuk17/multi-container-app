@@ -5,31 +5,31 @@ services:
   - docker
 
 before_install:
-  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t apshuk21/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run stephengrider/react-test npm test -- --coverage
+  - docker run -e CI=true apshuk21/react-test npm test -- --coverage
 
 after_success:
-  - docker build -t stephengrider/multi-client ./client
-  - docker build -t stephengrider/multi-nginx ./nginx
-  - docker build -t stephengrider/multi-server ./server
-  - docker build -t stephengrider/multi-worker ./worker
+  - docker build -t apshuk21/multi-client ./client
+  - docker build -t apshuk21/multi-nginx ./nginx
+  - docker build -t apshuk21/multi-server ./server
+  - docker build -t apshuk21/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push stephengrider/multi-client
-  - docker push stephengrider/multi-nginx
-  - docker push stephengrider/multi-server
-  - docker push stephengrider/multi-worker
+  - docker push apshuk21/multi-client
+  - docker push apshuk21/multi-nginx
+  - docker push apshuk21/multi-server
+  - docker push apshuk21/multi-worker
 
 deploy:
   provider: elasticbeanstalk
-  region: us-west-1
-  app: multi-docker
-  env: MultiDocker-env
-  bucket_name: elasticbeanstalk-us-west-1-306476627547
-  bucket_path: docker-multi
+  region: ap-south-1
+  app: fibonacci-multi-docker
+  env: FibonacciMultiDocker-env
+  bucket_name: elasticbeanstalk-ap-south-1-159560691145
+  bucket_path: fibonacci-docker-multi-container
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
